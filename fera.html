@@ -1,0 +1,32 @@
+<html>
+    <meta name="viewport" content="width=device-width">
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="fileSaver.js"></script>
+    </head>
+
+    <body>
+        <script>
+            $(document).ready(() =>
+            {
+                $("#showText").html(localStorage.data);
+                $("#save-btn").click(() => 
+                {
+                    localStorage.data = $("#inputText").val() + "<br>" + localStorage.data;   
+                    $("#showText").html(localStorage.data);      
+                    $("#inputText").val("");
+                });
+            });
+        </script>
+        <div>
+            <div style="padding: 26px;">
+                Nuova frasi: <input style="margin-left: 6px;" type="text" id="inputText">
+            </div>
+            <button id="save-btn">Save</button>
+        </div>
+        <div>
+            <p id="showText" style="overflow-y: scroll; max-height: 400px;"></p>
+        </div>
+    </body>
+</html>
