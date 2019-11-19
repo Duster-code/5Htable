@@ -3,19 +3,36 @@
 
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="fileSaver.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" 
+            type="text/javascript"></script>
     </head>
 
     <body>
         <script>
+            var x;
+            var client = null;
+            var host = "broker.hivemq.com";
+            var port = 8000;
+
             $(document).ready(() =>
             {
-                $("#showText").html(localStorage.data);
-                $("#save-btn").click(() => 
-                {
-                    localStorage.data = $("#inputText").val() + "<br>" + localStorage.data;   
-                    $("#showText").html(localStorage.data);      
-                    $("#inputText").val("");
+                client = new Paho.MQTT.Client(host, port, "broker");
+                client.connect({
+                    onSuccess: () => {
+                        client.subscribe("fera/frasi/ninja");
+                        client.onMessageArrived = (message) => {
+                            let data = message.payloadString;
+
+                            $("#showText").html(data);
+                            $("#save-btn").click(() => 
+                            {
+                                data = $("#inputText").val() + "<br>" + data;   
+                                $("#showText").html(data);      
+                                $("#inputText").val("");
+                                client.send("fera/frasi/ninja", data, 1, true)
+                            });
+                        };
+                    }
                 });
             });
         </script>
