@@ -16,22 +16,27 @@
 
             $(document).ready(() =>
             {
+                let data = null;
+
                 client = new Paho.MQTT.Client(host, port, "broker");
                 client.connect({
                     onSuccess: () => {
                         client.subscribe("fera/frasi/ninja");
                         client.onMessageArrived = (message) => {
-                            let data = message.payloadString;
-
+                            data = message.payloadString;
                             $("#showText").html(data);
-                            $("#save-btn").click(() => 
-                            {
-                                data = $("#inputText").val() + "<br>" + data;   
-                                $("#showText").html(data);      
-                                $("#inputText").val("");
-                                client.send("fera/frasi/ninja", data, 1, true)
-                            });
                         };
+                    }
+                });
+
+                $("#save-btn").click(() => 
+                {
+                    if($("#inputText").val())
+                    {
+                        data = $("#inputText").val() + "<br>" + data;   
+                        $("#showText").html(data);      
+                        $("#inputText").val("");
+                        client.send("fera/frasi/ninja", data, 1, true)
                     }
                 });
             });
