@@ -18,7 +18,7 @@
             {
                 let data = null;
 
-                client = new Paho.MQTT.Client(host, port, "broker");
+                client = new Paho.MQTT.Client(host, port, "");
                 client.connect({
                     onSuccess: () => {
                         client.subscribe("fera/frasi/ninja");
